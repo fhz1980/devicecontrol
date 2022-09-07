@@ -19,17 +19,12 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 
+import com.ffait.util.*;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.videoio.VideoCapture;
 
 import com.ffait.manager.SerialPortManager;
-import com.ffait.util.BlackImg;
-import com.ffait.util.ByteUtils;
-import com.ffait.util.DownloadFromUrl;
-import com.ffait.util.NewLineString;
-import com.ffait.util.ParameterOperate;
-import com.ffait.util.ShowUtils;
 
 import gnu.io.PortInUseException;
 import gnu.io.SerialPort;
@@ -153,6 +148,7 @@ public class ManageFaceMainFrame {
 			Mat frame = new Mat();
 			while (flag == 0) {
 				camera.read(frame);
+				BufferedImage bufferedImage = ImageBlur.gausssianBlur(frame);
 				BufferedImage bi=fs.mat2BI(frame);
 				long currenttime=System.currentTimeMillis();
 				if(currenttime-pretime>10000) {
@@ -244,12 +240,16 @@ public class ManageFaceMainFrame {
 				}
 				showImg = BlackImg.deepCopy(bi);
 
-				BlackImg.drawFace(showImg);
+				/*BlackImg.drawFace(showImg);
 
 				cameralable.setIcon(new ImageIcon(showImg));
 
 				BlackImg.drawFace(bi);
-				cameralable.setIcon(new ImageIcon(bi));
+				cameralable.setIcon(new ImageIcon(bi));*/
+
+				ImageBlur.drawFace(bufferedImage,showImg.getSubimage(350,190,270,340));
+				cameralable.setIcon(new ImageIcon(bufferedImage));
+
 			}
 		}
 	}
